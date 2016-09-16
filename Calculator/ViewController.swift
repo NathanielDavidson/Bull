@@ -33,6 +33,14 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func brainClear() {
+        brain = CalculatorBrain()
+        if let result = brain.evaluate(){
+            displayValue = result
+        } else {
+            displayValue = 0
+        }
+    }
     @IBAction func operate(sender: UIButton) {
         if userisInTheMiddleOfTypingANumber {
             enter()
