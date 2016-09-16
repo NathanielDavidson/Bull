@@ -41,6 +41,9 @@ class ViewController: UIViewController {
             displayValue = 0
         }
     }
+    @IBAction func pi() {
+        brain.pushOperand(M_PI)
+    }
     @IBAction func operate(sender: UIButton) {
         if userisInTheMiddleOfTypingANumber {
             enter()

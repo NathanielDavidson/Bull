@@ -155,6 +155,10 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6KE-eh-7WT">
                                 <rect key="frame" x="28" y="467" width="102" height="125"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="π"/>
+                                <connections>
+                                    <action selector="pi" destination="BYZ-38-t0r" eventType="touchUpInside" id="D8i-LN-8YV"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eId-3Z-v6Q">
                                 <rect key="frame" x="470" y="334" width="102" height="125"/>
