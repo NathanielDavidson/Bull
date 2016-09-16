@@ -14,6 +14,7 @@
 		6401200B1D8BA13400D77FA8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 640120091D8BA13400D77FA8 /* LaunchScreen.storyboard */; };
 		640120161D8BA13400D77FA8 /* CalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640120151D8BA13400D77FA8 /* CalculatorTests.swift */; };
 		640120211D8BA13400D77FA8 /* CalculatorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640120201D8BA13400D77FA8 /* CalculatorUITests.swift */; };
+		6401202F1D8BBBB500D77FA8 /* CalculatorBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6401202E1D8BBBB500D77FA8 /* CalculatorBrain.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		6401201C1D8BA13400D77FA8 /* CalculatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CalculatorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		640120201D8BA13400D77FA8 /* CalculatorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorUITests.swift; sourceTree = "<group>"; };
 		640120221D8BA13400D77FA8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6401202E1D8BBBB500D77FA8 /* CalculatorBrain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalculatorBrain.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 				640120071D8BA13400D77FA8 /* Assets.xcassets */,
 				640120091D8BA13400D77FA8 /* LaunchScreen.storyboard */,
 				6401200C1D8BA13400D77FA8 /* Info.plist */,
+				6401202E1D8BBBB500D77FA8 /* CalculatorBrain.swift */,
 			);
 			path = Calculator;
 			sourceTree = "<group>";
@@ -256,6 +259,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6401202F1D8BBBB500D77FA8 /* CalculatorBrain.swift in Sources */,
 				640120031D8BA13400D77FA8 /* ViewController.swift in Sources */,
 				640120011D8BA13400D77FA8 /* AppDelegate.swift in Sources */,
 			);
