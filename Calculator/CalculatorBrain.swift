@@ -114,18 +114,18 @@ class CalculatorBrain
                             operand2V = "?"
                         }
                         var output = "";
-                        if operandEvalutation2.prevOp != nil || operandEvalutation2.prevOp!.description=="×" || operandEvalutation2.prevOp!.description=="÷"{
+                        if (op.description=="÷" || op.description=="×") && operandEvalutation2.prevOp != nil && ( operandEvalutation2.prevOp!.description=="-" || operandEvalutation2.prevOp!.description=="+" ) {
                             output = "\(output) ( \(operand2V) )"
                         }else{
                             output = "\(output) \(operand2V) "
                         }
                         output = "\(output)\(symbol)"
-                        if operandEvalutation1.prevOp != nil || operandEvalutation1.prevOp!.description=="×" || operandEvalutation1.prevOp!.description=="÷"{
+                        if (op.description=="÷" || op.description=="×") && operandEvalutation1.prevOp != nil && ( operandEvalutation1.prevOp!.description=="-" || operandEvalutation1.prevOp!.description=="+") {
                             output = "\(output) ( \(operand1) )"
                         }else{
                             output = "\(output) \(operand1)"
                         }
-                        return (ops, output, op)
+                        return (operandEvalutation2.remainingOps, output, op)
                     }
                 }
             }
