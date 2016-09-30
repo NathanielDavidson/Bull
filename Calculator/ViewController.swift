@@ -28,7 +28,7 @@ class ViewController: UIViewController {
         userisInTheMiddleOfTypingANumber = false
         if let result = brain.pushOperand(displayValue!){
             displayValue = result
-            history.text = brain.describe!
+            history.text = "\(brain.describe!) = "
         } else {
             displayValue = 0
         }
@@ -41,6 +41,17 @@ class ViewController: UIViewController {
         history.text = brain.describe!
     }
     
+    @IBAction func MemorySet(sender: UIButton) {
+        brain.setMemory(displayValue)
+        userisInTheMiddleOfTypingANumber=false
+        displayValue = brain.evaluate();
+        history.text = "\(brain.describe!) = "
+        
+    }
+    @IBAction func MemoryTry(sender: UIButton) {
+        brain.performOperation("M")
+        history.text = brain.describe!
+    }
     @IBAction func pi() {
         brain.performOperation("π")
         history.text = brain.describe!
@@ -75,7 +86,7 @@ class ViewController: UIViewController {
         if let operation = sender.currentTitle {
             if let result = brain.performOperation(operation) {
                 displayValue = result
-                history.text = brain.describe!
+                history.text = "\(brain.describe!) = "
             } else {
                 displayValue = nil
                 history.text = brain.describe!
@@ -87,7 +98,11 @@ class ViewController: UIViewController {
             if(display.text!=="π"){
                 return M_PI
             }
-            return NSNumberFormatter().numberFromString(display.text!)!.doubleValue
+            if let val = NSNumberFormatter().numberFromString(display.text!) {
+                return val.doubleValue
+            }else{
+                return nil
+            }
         }
         set{
             if let y = newValue {

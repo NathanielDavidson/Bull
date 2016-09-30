@@ -11,11 +11,13 @@ import Foundation
 class CalculatorBrain
 {
     private var opStack = [Op]()
+    private var memory: Double? = nil
     
     private enum Op
     {
         case Operand(Double)
         case Constant(String, Double)
+        case Variable(String,  () -> Double? )
         case UnaryOperation(String, Double -> Double)
         case BinaryOperation(String, (Double, Double) -> Double)
         
@@ -29,6 +31,8 @@ class CalculatorBrain
                 case .BinaryOperation(let symbol, _):
                     return symbol
                 case .Constant(let symbol, _):
+                    return symbol
+                case .Variable(let symbol, _):
                     return symbol
                 }
             }
@@ -49,6 +53,7 @@ class CalculatorBrain
         learnOp(Op.UnaryOperation("sin", sin))
         learnOp(Op.UnaryOperation("cos", cos))
         learnOp(Op.Constant("π", M_PI));
+        learnOp(Op.Variable("M", { self.memory }));
     }
     
     func pushOperand(operand: Double) -> Double? {
@@ -85,6 +90,8 @@ class CalculatorBrain
                         return (operation(operand1, operand2), operandEvalutation2.remainingOps)
                     }
                 }
+            case .Variable(_, let variableVal):
+                return (variableVal(), remainingOps)
             }
         }
         return (nil, ops)
@@ -104,6 +111,8 @@ class CalculatorBrain
                 }
             case .Constant( let symbol, _):
                 return (remainingOps, "\(symbol)", op)
+            case .Variable( let symbol, _):
+                return (remainingOps, "\(symbol)", op)
             case .BinaryOperation(let symbol , _):
                 let operandEvalutation1 = describe(remainingOps)
                 if let operand1 = operandEvalutation1.display {
@@ -114,13 +123,13 @@ class CalculatorBrain
                             operand2V = "?"
                         }
                         var output = "";
-                        if (op.description=="÷" || op.description=="×") && operandEvalutation2.prevOp != nil && ( operandEvalutation2.prevOp!.description=="-" || operandEvalutation2.prevOp!.description=="+" ) {
+                        if (op.description=="÷" || op.description=="×") && operandEvalutation2.prevOp != nil && ( operandEvalutation2.prevOp!.description=="−" || operandEvalutation2.prevOp!.description=="+" ) {
                             output = "\(output) ( \(operand2V) )"
                         }else{
                             output = "\(output) \(operand2V) "
                         }
                         output = "\(output)\(symbol)"
-                        if (op.description=="÷" || op.description=="×") && operandEvalutation1.prevOp != nil && ( operandEvalutation1.prevOp!.description=="-" || operandEvalutation1.prevOp!.description=="+") {
+                        if (op.description=="÷" || op.description=="×") && operandEvalutation1.prevOp != nil && ( operandEvalutation1.prevOp!.description=="−" || operandEvalutation1.prevOp!.description=="+") {
                             output = "\(output) ( \(operand1) )"
                         }else{
                             output = "\(output) \(operand1)"
@@ -134,6 +143,12 @@ class CalculatorBrain
     }
     func clear(){
         opStack.removeAll();
+        memory = 0
+    }
+    func setMemory (k: Double?) {
+        if let m = k {
+            memory = m
+        }
     }
     func evaluate() -> Double? {
         let (result, _) = evaluate(opStack)
@@ -145,9 +160,13 @@ class CalculatorBrain
             //nope
         }
         get {
-            let result = describe(opStack)
-            print(opStack)
-            return result.display
+            var result = describe(opStack)
+            var output = result.display!
+            while !result.remainingOps.isEmpty {
+                result = describe(result.remainingOps)
+                output = "\(result.display!), \(output)"
+            }
+            return output
         }
     }
 }
