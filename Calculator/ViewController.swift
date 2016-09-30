@@ -26,9 +26,9 @@ class ViewController: UIViewController {
     
     @IBAction func enter() {
         userisInTheMiddleOfTypingANumber = false
-        history.text = display.text!
-        if let result = brain.pushOperand(displayValue){
+        if let result = brain.pushOperand(displayValue!){
             displayValue = result
+            history.text = brain.describe!
         } else {
             displayValue = 0
         }
@@ -36,19 +36,15 @@ class ViewController: UIViewController {
     @IBOutlet weak var history: UILabel!
     
     @IBAction func brainClear() {
-        brain = CalculatorBrain()
-        history.text = ""
-        if let result = brain.evaluate(){
-            displayValue = result
-        } else {
-            displayValue = 0
-        }
+        brain.clear();
+        displayValue = 0
+        history.text = brain.describe!
     }
     
     @IBAction func pi() {
-        brain.pushOperand(M_PI)
-        history.text = "\(M_PI)"
-        displayValue = M_PI
+        brain.performOperation("π")
+        history.text = brain.describe!
+        display.text = "π"
     }
     
     @IBAction func backSpace() {
@@ -66,6 +62,7 @@ class ViewController: UIViewController {
         if userisInTheMiddleOfTypingANumber {
             if display.text!.containsString(".")==false {
                 display.text = "\(display.text!)."
+                history.text = brain.describe!
             } 
         }
     }
@@ -76,20 +73,28 @@ class ViewController: UIViewController {
             enter()
         }
         if let operation = sender.currentTitle {
-            history.text = sender.currentTitle!
             if let result = brain.performOperation(operation) {
                 displayValue = result
+                history.text = brain.describe!
             } else {
-                displayValue = 0
+                displayValue = nil
+                history.text = brain.describe!
             }
         }
     }
-    var displayValue: Double {
+    var displayValue: Double? {
         get {
+            if(display.text!=="π"){
+                return M_PI
+            }
             return NSNumberFormatter().numberFromString(display.text!)!.doubleValue
         }
         set{
-            display.text = "\(newValue)"
+            if let y = newValue {
+                display.text = "\(y)"
+            }else {
+                display.text="nil"
+            }
             userisInTheMiddleOfTypingANumber = false
         }
     }

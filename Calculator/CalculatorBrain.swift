@@ -15,6 +15,7 @@ class CalculatorBrain
     private enum Op
     {
         case Operand(Double)
+        case Constant(String, Double)
         case UnaryOperation(String, Double -> Double)
         case BinaryOperation(String, (Double, Double) -> Double)
         
@@ -26,6 +27,8 @@ class CalculatorBrain
                 case .UnaryOperation(let symbol, _):
                     return symbol
                 case .BinaryOperation(let symbol, _):
+                    return symbol
+                case .Constant(let symbol, _):
                     return symbol
                 }
             }
@@ -45,6 +48,7 @@ class CalculatorBrain
         learnOp(Op.UnaryOperation("√", sqrt))
         learnOp(Op.UnaryOperation("sin", sin))
         learnOp(Op.UnaryOperation("cos", cos))
+        learnOp(Op.Constant("π", M_PI));
     }
     
     func pushOperand(operand: Double) -> Double? {
@@ -71,6 +75,8 @@ class CalculatorBrain
                 if let operand = operandEvaluation.result {
                     return (operation(operand), operandEvaluation.remainingOps)
                 }
+            case .Constant( _, let constantValue):
+                return (constantValue, remainingOps)
             case .BinaryOperation( _ , let operation):
                 let operandEvalutation1 = evaluate(remainingOps)
                 if let operand1 = operandEvalutation1.result {
@@ -80,13 +86,68 @@ class CalculatorBrain
                     }
                 }
             }
-            
         }
         return (nil, ops)
     }
+    private func describe(ops:[Op]) -> (remainingOps: [Op], display: String?, prevOp: Op?){
+        if !ops.isEmpty{
+            var remainingOps = ops
+            let op = remainingOps.removeLast()
+            switch op {
+            case .Operand(let operand):
+                return (remainingOps, "\(operand)", op)
+            case .UnaryOperation( let symbol, _):
+                let operandEvaluation = describe(remainingOps);
+                if let operand = operandEvaluation.display {
+                    print(operand)
+                    return (operandEvaluation.remainingOps, "\(symbol)(\(operand))", op)
+                }
+            case .Constant( let symbol, _):
+                return (remainingOps, "\(symbol)", op)
+            case .BinaryOperation(let symbol , _):
+                let operandEvalutation1 = describe(remainingOps)
+                if let operand1 = operandEvalutation1.display {
+                    let operandEvalutation2 = describe(operandEvalutation1.remainingOps)
+                    if let operand2 = operandEvalutation2.display {
+                        var operand2V = operand2;
+                        if operand2V=="" {
+                            operand2V = "?"
+                        }
+                        var output = "";
+                        if operandEvalutation2.prevOp != nil || operandEvalutation2.prevOp!.description=="×" || operandEvalutation2.prevOp!.description=="÷"{
+                            output = "\(output) ( \(operand2V) )"
+                        }else{
+                            output = "\(output) \(operand2V) "
+                        }
+                        output = "\(output)\(symbol)"
+                        if operandEvalutation1.prevOp != nil || operandEvalutation1.prevOp!.description=="×" || operandEvalutation1.prevOp!.description=="÷"{
+                            output = "\(output) ( \(operand1) )"
+                        }else{
+                            output = "\(output) \(operand1)"
+                        }
+                        return (ops, output, op)
+                    }
+                }
+            }
+        }
+        return (ops, "", nil)
+    }
+    func clear(){
+        opStack.removeAll();
+    }
     func evaluate() -> Double? {
         let (result, _) = evaluate(opStack)
-        print(opStack)
+        //print(opStack)
         return result
+    }
+    var describe: String? {
+        set{
+            //nope
+        }
+        get {
+            let result = describe(opStack)
+            print(opStack)
+            return result.display
+        }
     }
 }
